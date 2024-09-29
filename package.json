@@ -1,7 +1,7 @@
 {
   "name": "github-user-fetcher",
   "version": "1.0.0",
-  "description": "Command-line application to fetch GitHub user data and store it in PostgreSQL",
+  "description": "Command-line app to fetch GitHub user data and store it in PostgreSQL",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -17,6 +17,7 @@
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "pg-promise": "^11.9.1",
+    "printf": "^0.6.1",
     "ramda": "^0.30.1",
     "yargs": "^17.7.2"
   },

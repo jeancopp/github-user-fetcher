@@ -24,3 +24,23 @@ export const fetchGitHubUser = async (user: FetchUserDto): Promise<User> => {
         },
     };
 };
+
+interface Repository {
+    language: string | null
+}
+
+export const fetchUserTechnologies = async (
+    user: FetchUserDto,
+): Promise<string[]> => {
+    const technologies = new Set<string>();
+
+    const {data} = await axios.get(
+        `${GITHUB_API_URL}/users/${user.username}/repos`,
+    );
+
+    data
+        .filter((r: Repository) => !!r?.language)
+        .forEach((r: Repository) => technologies.add(r?.language ?? ""))
+
+    return Array.from(technologies.values());
+};

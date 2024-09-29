@@ -1,16 +1,38 @@
-interface Person {
-    firstName: string;
-    lastName: string;
-    email: string;
-    age: number;
-}
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
-const a : Person = {
-    firstName: 'Joe',
-    lastName: 'Doe',
-    email: 'joe@doe.com',
-    age: 35,
-}
+import {FetchUserDto} from "./dto/FetchUserDto";
+import fetchUserService from "./service/FetchUserService";
 
-console.log(a);
-console.log({...a}, "Linha gigantesca com mais de 80 caracteres para ver se o esling vai xiar de tanto aracter aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+const main = async () => {
+    yargs(hideBin(process.argv))
+        .command(
+            'fetch-user <username>',
+            'Fetch a GitHub user and store in the database',
+            (yargs) => {
+                yargs.positional('username', {
+                    describe: 'GitHub username',
+                    type: 'string',
+                });
+            },
+            async (args) => {
+                const user: FetchUserDto = {username: args.username as string};
+                await fetchUserService(user);
+
+                console.log(
+                    `Technologies for user ${user.username} stored in the database.`,
+                );
+            },
+        )
+
+        .demandCommand(1, 'You need to specify a command')
+        .help()
+        .strict()
+        .parse();
+};
+
+main()
+    .catch((error) => {
+        console.error('An unexpected error occurred:', error.message);
+    });

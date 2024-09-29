@@ -1,9 +1,10 @@
 import axios from 'axios';
+import {User} from '../entity/User';
 import {FetchUserDto} from "../dto/FetchUserDto";
 
 const GITHUB_API_URL = 'https://api.github.com';
 
-export const fetchGitHubUser = async (user: FetchUserDto): Promise<object> => {
+export const fetchGitHubUser = async (user: FetchUserDto): Promise<User> => {
     const response = await axios.get(`${GITHUB_API_URL}/users/${user.username}`);
     const data = response.data;
 

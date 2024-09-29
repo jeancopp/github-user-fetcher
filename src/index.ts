@@ -3,7 +3,8 @@ import {hideBin} from 'yargs/helpers';
 
 import {FetchUserDto} from "./dto/FetchUserDto";
 import fetchUserService from "./service/FetchUserService";
-
+import listUserService from "./service/ListUserService";
+import {ListUserDto} from "./dto/ListUserDto";
 
 const main = async () => {
     yargs(hideBin(process.argv))
@@ -25,7 +26,32 @@ const main = async () => {
                 );
             },
         )
+        .command(
+            'list-users',
+            'List all users in the database',
+            (yargs) => {
+                yargs
+                    .option('location', {
+                        alias: 'l',
+                        type: 'string',
+                        description: 'Filter users by location',
+                    })
+                    .option('technology', {
+                        alias: 't',
+                        type: 'string',
+                        description: 'Filter users by technology',
+                    });
+            },
+            async (args) => {
+                const filter : ListUserDto = {
+                    location: args.location as string|undefined ?? null,
+                    technology: args.technology as string|undefined ?? null,
+                };
 
+                await listUserService(filter)
+
+            },
+        )
         .demandCommand(1, 'You need to specify a command')
         .help()
         .strict()

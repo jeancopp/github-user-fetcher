@@ -11,29 +11,29 @@ interface UserPrintDto {
 
 
 const printData = (user: UserPrintDto | User) =>
-    console.log(
-        printf(
-            '|%-20s|%-50s|%-20s|',
-            user.login,
-            user.name || 'No Name',
-            user.location || "Unknown"
-        )
-    );
+  console.log(
+    printf(
+      '|%-20s|%-50s|%-20s|',
+      user.login,
+      user.name || 'No Name',
+      user.location || "Unknown"
+    )
+  );
 
 export default async function listUserService(filter: ListUserDto) {
-    const users: User[] =
+  const users: User[] =
         await findUsersByLocationAndTechnology(filter);
 
-    if (users.length === 0) {
-        console.log('No users found.');
-        return;
-    }
+  if (users.length === 0) {
+    console.log('No users found.');
+    return;
+  }
 
-    printData({
-        login: 'LOGIN',
-        name: 'NAME',
-        location: 'LOCATION',
-    });
+  printData({
+    login: 'LOGIN',
+    name: 'NAME',
+    location: 'LOCATION',
+  });
 
-    users.forEach(printData);
+  users.forEach(printData);
 }

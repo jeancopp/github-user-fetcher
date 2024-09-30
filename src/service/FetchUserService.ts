@@ -4,29 +4,29 @@ import {insertTechnology, linkUserToTechnology} from "../repository/TechnologyRe
 import {FetchUserDto} from "../dto/FetchUserDto";
 
 export default async function fetchUserService(userData: FetchUserDto) {
-    const user = await fetchGitHubUser(userData);
-    if (null === user) {
-        console.log("User not found!");
-        return;
-    }
+  const user = await fetchGitHubUser(userData);
+  if (null === user) {
+    console.log("User not found!");
+    return;
+  }
 
-    const savedUser = await insertUser(user);
-    console.trace(`User ${userData.username} stored in the database.`);
+  const savedUser = await insertUser(user);
+  console.trace(`User ${userData.username} stored in the database.`);
 
-    const technologies = await fetchUserTechnologies(userData);
+  const technologies = await fetchUserTechnologies(userData);
 
-    for (const technology of technologies) {
-        const technologyId = await insertTechnology(
-            technology,
-        );
+  for (const technology of technologies) {
+    const technologyId = await insertTechnology(
+      technology,
+    );
 
-        await linkUserToTechnology(
+    await linkUserToTechnology(
             savedUser.id!,
             technologyId,
-        );
-    }
-
-    console.trace(
-        `Technologies for user ${userData.username} stored in the database.`
     );
+  }
+
+  console.trace(
+    `Technologies for user ${userData.username} stored in the database.`
+  );
 }

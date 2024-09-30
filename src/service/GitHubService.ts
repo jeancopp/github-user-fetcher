@@ -1,12 +1,13 @@
-import axios from 'axios';
 import {User} from '../entity/User';
 import {FetchUserDto} from "../dto/FetchUserDto";
+import {get} from "../helper/request";
 
-const GITHUB_API_URL = 'https://api.github.com';
+export const fetchGitHubUser = async (user: FetchUserDto): Promise<User | null> => {
+    const {data, status} = await get(`/users/${user.username}`);
 
-export const fetchGitHubUser = async (user: FetchUserDto): Promise<User> => {
-    const response = await axios.get(`${GITHUB_API_URL}/users/${user.username}`);
-    const data = response.data;
+    if (status === 404) {
+        return null;
+    }
 
     return {
         github_id: data.id,
@@ -32,12 +33,13 @@ interface Repository {
 export const fetchUserTechnologies = async (
     user: FetchUserDto,
 ): Promise<string[]> => {
+
+    const {data, status} = await get(`/users/${user.username}/repos`);
+    if (status === 404) {
+        return [];
+    }
+
     const technologies = new Set<string>();
-
-    const {data} = await axios.get(
-        `${GITHUB_API_URL}/users/${user.username}/repos`,
-    );
-
     data
         .filter((r: Repository) => !!r?.language)
         .forEach((r: Repository) => technologies.add(r?.language ?? ""))

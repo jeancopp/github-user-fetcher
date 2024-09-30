@@ -10,17 +10,20 @@ import {User} from "../../src/entity/User";
 jest.mock('../../src/service/GitHubService');
 jest.mock('../../src/repository/UserRepository');
 jest.mock('../../src/repository/TechnologyRepository');
+//Mocking the following module to not receive error messages,
+// even that is not being called here directly
+jest.mock('../../src/repository/db');
 
 describe('fetchUserService', () => {
+    const userDto: FetchUserDto = { username: 'testuser' };
     const user: User = {
         github_id: 123456,
-        login: 'userongithub',
+        login: userDto.username,
         name: 'User On GitHub',
         location: 'Github City',
         meta_data: {},
     };
 
-    const userDto: FetchUserDto = { username: 'testuser' };
     const mockTechnologies = ['JavaScript', 'TypeScript'];
 
     beforeEach(() => {
@@ -29,6 +32,8 @@ describe('fetchUserService', () => {
 
     it('should insert user with their stack into the db', async () => {
         //given
+        const consoleSpy =
+            jest.spyOn(console, 'trace').mockImplementation();
         (fetchGitHubUser as jest.Mock).mockResolvedValueOnce(user);
         (insertUser as jest.Mock).mockResolvedValueOnce({ id: 1 });
         (fetchUserTechnologies as jest.Mock).mockResolvedValueOnce(mockTechnologies);
@@ -50,6 +55,14 @@ describe('fetchUserService', () => {
             expect(insertTechnology).toHaveBeenCalledWith(tech);
         });
         expect(linkUserToTechnology).toHaveBeenCalledTimes(mockTechnologies.length);
+
+        [
+            `User ${userDto.username} stored in the database.`,
+            `Technologies for user ${userDto.username} stored in the database.`
+        ].forEach( (value, index) => {
+            expect(consoleSpy).toHaveBeenNthCalledWith(index+1, value);
+        })
+        expect(consoleSpy).toHaveBeenCalledTimes(2);
     });
 
     it('should just log when user is not found', async () => {

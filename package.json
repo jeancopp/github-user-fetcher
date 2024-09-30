@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
-    "migrate": "node migrations/runMigrations.mjs",
+    "migrate": "node migrations/runMigrations.js",
     "lint": "eslint 'src/**/*.ts'",
     "test": "jest"
   },

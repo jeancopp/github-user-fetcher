@@ -15,8 +15,8 @@ const printData = (user: UserPrintDto | User) =>
         printf(
             '|%-20s|%-50s|%-20s|',
             user.login,
-            user.name ?? 'No Name',
-            user.location ?? "Unknown"
+            user.name || 'No Name',
+            user.location || "Unknown"
         )
     );
 
@@ -36,5 +36,4 @@ export default async function listUserService(filter: ListUserDto) {
     });
 
     users.forEach(printData);
-
 }

@@ -18,6 +18,11 @@ const main = async () => {
         });
       },
       async (args) => {
+        if (args.help) {
+          yargs.showHelp();
+          return;
+        }
+
         const user: FetchUserDto = {username: args.username as string};
         await fetchUserService(user);
 
@@ -43,6 +48,11 @@ const main = async () => {
           });
       },
       async (args) => {
+        if (args.help) {
+          yargs.showHelp();
+          return;
+        }
+
         const filter : ListUserDto = {
           location: args.location as string|undefined ?? null,
           technology: args.technology as string|undefined ?? null,

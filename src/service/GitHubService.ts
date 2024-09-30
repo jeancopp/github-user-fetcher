@@ -2,7 +2,7 @@ import {User} from '../entity/User';
 import {FetchUserDto} from "../dto/FetchUserDto";
 import {get} from "../helper/request";
 
-export const fetchGitHubUser = async (user: FetchUserDto): Promise<User | null> => {
+const fetchGitHubUser = async (user: FetchUserDto): Promise<User | null> => {
     const {data, status} = await get(`/users/${user.username}`);
 
     if (status === 404) {
@@ -30,7 +30,7 @@ interface Repository {
     language: string | null
 }
 
-export const fetchUserTechnologies = async (
+const fetchUserTechnologies = async (
     user: FetchUserDto,
 ): Promise<string[]> => {
 
@@ -46,3 +46,8 @@ export const fetchUserTechnologies = async (
 
     return Array.from(technologies.values());
 };
+
+export {
+    fetchGitHubUser,
+    fetchUserTechnologies,
+}

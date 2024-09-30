@@ -5,6 +5,10 @@ import {FetchUserDto} from "../dto/FetchUserDto";
 
 export default async function fetchUserService(userData: FetchUserDto) {
     const user = await fetchGitHubUser(userData);
+    if (null === user) {
+        console.log("User not found!");
+        return;
+    }
 
     const savedUser = await insertUser(user);
     console.trace(`User ${userData.username} stored in the database.`);
@@ -23,6 +27,6 @@ export default async function fetchUserService(userData: FetchUserDto) {
     }
 
     console.trace(
-        `Technologies for user ${userData.username} stored in the database.`,
+        `Technologies for user ${userData.username} stored in the database.`
     );
 }

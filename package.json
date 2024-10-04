@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
-    "migrate": "node migrations/runMigrations.js",
+    "migrate": "node-pg-migrate up",
     "lint": "eslint 'src/**/*.ts'",
     "test": "jest",
     "test:coverage": "jest --coverage"
@@ -32,6 +32,7 @@
     "eslint": "^8.57.1",
     "globals": "^15.9.0",
     "jest": "^29.7.0",
+    "node-pg-migrate": "^7.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",

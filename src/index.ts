@@ -94,6 +94,9 @@ const main = async (): Promise<void> => {
 
 main()
   .catch((error): void => {
-    logger.info("It was not possible to process your request");
+    logger.info(`It was not possible to process your request: ${error.message}`);
     logger.debug(`Unexpected error happened: ${error}`);
-  });
+  })
+  .finally(() => {
+    logger.debug('Processing completed');
+  })

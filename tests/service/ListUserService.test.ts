@@ -80,7 +80,8 @@ describe('ListUserService', (): void => {
 
   it('When call database should trigger an error ', async () => {
     (findUsersByLocationAndTechnology as jest.Mock).mockRejectedValueOnce(new Error('Database Error'));
-    await expect(listUserService(filter)).rejects.toThrow('Database Error');
-    expect(logger.info).not.toHaveBeenCalled();
+    await expect(listUserService(filter)).rejects.toThrow('Internal error on listing user data');
+    expect(logger.debug)
+      .toHaveBeenCalledTimes(1);
   });
 });

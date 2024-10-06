@@ -4,9 +4,10 @@ import {hideBin} from 'yargs/helpers';
 import fetchUserService from "./service/FetchUserService";
 import {FetchUserDto} from "./dto/FetchUserDto";
 
-import listUserService from "./service/ListUserService";
+import listUserService, {printData} from "./service/ListUserService";
 import {ListUserDto} from "./dto/ListUserDto";
 import {UserTechnologiesDto} from "./dto/UserTechnologiesDto";
+import {sanitizeFilter, sanitizeUsername} from "./helper/sanitize";
 
 const main = async (): Promise<void> => {
   yargs(hideBin(process.argv))
@@ -18,6 +19,12 @@ const main = async (): Promise<void> => {
           describe: 'GitHub username',
           type: 'string',
         });
+        yargs
+          .option('print', {
+            alias: 'p',
+            type: 'string',
+            description: 'Print user data',
+          })
       },
       async (args): Promise<void> => {
         if (args.help) {
@@ -25,16 +32,23 @@ const main = async (): Promise<void> => {
           return;
         }
 
-        const user: FetchUserDto = {username: args.username as string};
+        const user: FetchUserDto = {
+          username: sanitizeUsername(args.username as string)
+        };
         const storedUser: UserTechnologiesDto | null =
           await fetchUserService(user);
 
-        if(storedUser){
-          console.log(
-            `User(${user.username}) found and stored in the database.`
-          );
-        }else{
-          console.log(`User not found`)
+        if(!storedUser){
+          console.log(`User not found`);
+          return;
+        }
+
+        console.log(
+          `User(${user.username}) found and stored in the database.`
+        );
+
+        if(args.print){
+          printData(storedUser);
         }
       },
     )
@@ -60,10 +74,10 @@ const main = async (): Promise<void> => {
           return;
         }
 
-        const filter: ListUserDto = {
+        const filter: ListUserDto = sanitizeFilter({
           location: args.location as string | undefined ?? null,
           technology: args.technology as string | undefined ?? null,
-        };
+        });
 
         await listUserService(filter);
       },

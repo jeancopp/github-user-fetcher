@@ -3,7 +3,10 @@ import {FetchUserDto} from "../dto/FetchUserDto";
 import {get} from "../helper/request";
 
 const fetchGitHubUser = async (user: FetchUserDto): Promise<User | null> => {
-  const {data, status} = await get(`/users/${user.username}`);
+  const {data, status}: {
+    data: any,
+    status: number,
+  } = await get(`/users/${user.username}`);
 
   if (status === 404) {
     return null;
@@ -27,20 +30,23 @@ const fetchGitHubUser = async (user: FetchUserDto): Promise<User | null> => {
 };
 
 interface Repository {
-    language: string | null
+  language: string | null
 }
 
 const fetchUserTechnologies = async (
   user: FetchUserDto,
 ): Promise<string[]> => {
 
-  const {data, status} =
+  const {data, status}: {
+    data: any,
+    status: number,
+  } =
     await get(`/users/${user.username}/repos`);
   if (status === 404) {
     return [];
   }
 
-  const technologies = new Set<string>();
+  const technologies: Set<string> = new Set<string>();
   data
     .filter((r: Repository) => !!r?.language)
     .forEach((r: Repository) => technologies.add(r?.language ?? ""))

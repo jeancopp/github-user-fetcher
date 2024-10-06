@@ -34,7 +34,8 @@ const fetchUserTechnologies = async (
   user: FetchUserDto,
 ): Promise<string[]> => {
 
-  const {data, status} = await get(`/users/${user.username}/repos`);
+  const {data, status} =
+    await get(`/users/${user.username}/repos`);
   if (status === 404) {
     return [];
   }

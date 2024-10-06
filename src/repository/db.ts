@@ -1,15 +1,15 @@
-import pgPromise from 'pg-promise';
+import pgPromise, {IDatabase, IMain} from 'pg-promise';
 import dotenv from 'dotenv';
+dotenv.config();
 
-const pgp = pgPromise();
-const {parsed} = dotenv.config();
+const pgp: IMain = pgPromise();
 
-const db = pgp({
-  host: parsed?.DB_HOST ?? "localhost",
-  port: parseInt(parsed?.DB_PORT ?? "5432"),
-  database: parsed?.DB_NAME,
-  user: parsed?.DB_USER,
-  password: parsed?.DB_PASSWORD,
+const db: IDatabase<any> = pgp({
+  host: process.env?.DB_HOST ?? "localhost",
+  port: parseInt(process.env?.DB_PORT ?? "5432"),
+  database: process.env?.DB_NAME,
+  user: process.env?.DB_USER,
+  password: process.env?.DB_PASSWORD,
 });
 
 export default db;

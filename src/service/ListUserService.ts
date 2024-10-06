@@ -4,13 +4,12 @@ import {User} from "../entity/User";
 import printf from "printf";
 
 interface UserPrintDto {
-    login: string;
-    name: string;
-    location: string;
+  login: string;
+  name: string;
+  location: string;
 }
 
-
-const printData = (user: UserPrintDto | User) =>
+const printData = (user: UserPrintDto | User): void =>
   console.log(
     printf(
       '|%-20s|%-50s|%-20s|',
@@ -20,9 +19,9 @@ const printData = (user: UserPrintDto | User) =>
     )
   );
 
-export default async function listUserService(filter: ListUserDto) {
+const listUserService = async function (filter: ListUserDto): Promise<void> {
   const users: User[] =
-        await findUsersByLocationAndTechnology(filter);
+    await findUsersByLocationAndTechnology(filter);
 
   if (users.length === 0) {
     console.log('No users found.');
@@ -37,3 +36,5 @@ export default async function listUserService(filter: ListUserDto) {
 
   users.forEach(printData);
 }
+
+export default listUserService;

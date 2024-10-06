@@ -1,12 +1,13 @@
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
-import {FetchUserDto} from "./dto/FetchUserDto";
 import fetchUserService from "./service/FetchUserService";
+import {FetchUserDto} from "./dto/FetchUserDto";
+
 import listUserService from "./service/ListUserService";
 import {ListUserDto} from "./dto/ListUserDto";
 
-const main = async () => {
+const main = async (): Promise<void> => {
   yargs(hideBin(process.argv))
     .command(
       'fetch-user <username>',
@@ -17,7 +18,7 @@ const main = async () => {
           type: 'string',
         });
       },
-      async (args) => {
+      async (args): Promise<void> => {
         if (args.help) {
           yargs.showHelp();
           return;
@@ -47,19 +48,18 @@ const main = async () => {
             description: 'Filter users by technology',
           });
       },
-      async (args) => {
+      async (args): Promise<void> => {
         if (args.help) {
           yargs.showHelp();
           return;
         }
 
-        const filter : ListUserDto = {
-          location: args.location as string|undefined ?? null,
-          technology: args.technology as string|undefined ?? null,
+        const filter: ListUserDto = {
+          location: args.location as string | undefined ?? null,
+          technology: args.technology as string | undefined ?? null,
         };
 
-        await listUserService(filter)
-
+        await listUserService(filter);
       },
     )
     .demandCommand(1, 'You need to specify a command')
@@ -69,6 +69,6 @@ const main = async () => {
 };
 
 main()
-  .catch((error) => {
+  .catch((error): void => {
     console.error('An unexpected error occurred:', error.message);
   });

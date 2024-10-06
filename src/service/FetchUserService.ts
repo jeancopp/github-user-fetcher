@@ -5,11 +5,12 @@ import {
   linkUserToTechnology
 } from "../repository/TechnologyRepository";
 import {FetchUserDto} from "../dto/FetchUserDto";
-import {UserTechnologies} from "../entity/User";
+import {UserTechnologiesDto} from "../dto/UserTechnologiesDto";
+import {User} from "../entity/User";
 
 export default async function fetchUserService(userData: FetchUserDto)
-  : Promise<UserTechnologies | null> {
-  const user = await fetchGitHubUser(userData);
+  : Promise<UserTechnologiesDto | null> {
+  const user: User|null = await fetchGitHubUser(userData);
   if (null === user) {
     return null;
   }

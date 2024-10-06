@@ -1,26 +1,28 @@
 import {ListUserDto} from "../dto/ListUserDto";
 import {findUsersByLocationAndTechnology} from "../repository/UserRepository";
-import {User} from "../entity/User";
 import printf from "printf";
+import {UserTechnologiesDto} from "../dto/UserTechnologiesDto";
 
 interface UserPrintDto {
   login: string;
   name: string;
   location: string;
+  technologies: string[];
 }
 
-export const printData = (user: UserPrintDto | User): void =>
+export const printData = (user: UserPrintDto | UserTechnologiesDto): void =>
   console.log(
     printf(
-      '|%-20s|%-50s|%-20s|',
+      '|%-20s|%-40s|%-20s|%-50s|',
       user.login,
       user.name || 'No Name',
-      user.location || "Unknown"
+      user.location || "Unknown",
+      user.technologies.join(',')
     )
   );
 
 const listUserService = async function (filter: ListUserDto): Promise<void> {
-  const users: User[] =
+  const users: UserTechnologiesDto[] =
     await findUsersByLocationAndTechnology(filter);
 
   if (users.length === 0) {
@@ -32,6 +34,7 @@ const listUserService = async function (filter: ListUserDto): Promise<void> {
     login: 'LOGIN',
     name: 'NAME',
     location: 'LOCATION',
+    technologies: ['TECHNOLOGIES'],
   });
 
   users.forEach(printData);

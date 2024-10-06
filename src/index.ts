@@ -38,7 +38,7 @@ const main = async (): Promise<void> => {
         const storedUser: UserTechnologiesDto | null =
           await fetchUserService(user);
 
-        if(!storedUser){
+        if (!storedUser) {
           console.log(`User not found`);
           return;
         }
@@ -47,7 +47,7 @@ const main = async (): Promise<void> => {
           `User(${user.username}) found and stored in the database.`
         );
 
-        if(args.print){
+        if (args.print) {
           printData(storedUser);
         }
       },
@@ -78,8 +78,8 @@ const main = async (): Promise<void> => {
           location: args.location as string | undefined ?? null,
           technology: args.technology as string | undefined ?? null,
         });
-
         await listUserService(filter);
+        return;
       },
     )
     .demandCommand(1, 'You need to specify a command')

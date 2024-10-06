@@ -6,6 +6,7 @@ import {FetchUserDto} from "./dto/FetchUserDto";
 
 import listUserService from "./service/ListUserService";
 import {ListUserDto} from "./dto/ListUserDto";
+import {UserTechnologiesDto} from "./dto/UserTechnologiesDto";
 
 const main = async (): Promise<void> => {
   yargs(hideBin(process.argv))
@@ -25,11 +26,16 @@ const main = async (): Promise<void> => {
         }
 
         const user: FetchUserDto = {username: args.username as string};
-        await fetchUserService(user);
+        const storedUser: UserTechnologiesDto | null =
+          await fetchUserService(user);
 
-        console.log(
-          `Technologies for user ${user.username} stored in the database.`,
-        );
+        if(storedUser){
+          console.log(
+            `User(${user.username}) found and stored in the database.`
+          );
+        }else{
+          console.log(`User not found`)
+        }
       },
     )
     .command(

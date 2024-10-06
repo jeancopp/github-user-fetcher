@@ -29,10 +29,6 @@ export default async function fetchUserService(userData: FetchUserDto)
         technologyId,
       );
     }
-
-    console.trace(
-      `Technologies for user ${userData.username} stored.`
-    );
   }
 
   return {

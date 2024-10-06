@@ -1,3 +1,4 @@
+import logger from "./helper/logger";
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
@@ -9,7 +10,9 @@ import {ListUserDto} from "./dto/ListUserDto";
 import {UserTechnologiesDto} from "./dto/UserTechnologiesDto";
 import {sanitizeFilter, sanitizeUsername} from "./helper/sanitize";
 
+
 const main = async (): Promise<void> => {
+
   yargs(hideBin(process.argv))
     .command(
       'fetch-user <username>',
@@ -22,7 +25,7 @@ const main = async (): Promise<void> => {
         yargs
           .option('print', {
             alias: 'p',
-            type: 'string',
+            type: 'boolean',
             description: 'Print user data',
           })
       },
@@ -39,16 +42,16 @@ const main = async (): Promise<void> => {
           await fetchUserService(user);
 
         if (!storedUser) {
-          console.log(`User not found`);
+          logger.info(`User not found`);
           return;
         }
 
-        console.log(
+        logger.info(
           `User(${user.username}) found and stored in the database.`
         );
 
         if (args.print) {
-          printData(storedUser);
+          printData(storedUser, true);
         }
       },
     )
@@ -90,5 +93,5 @@ const main = async (): Promise<void> => {
 
 main()
   .catch((error): void => {
-    console.error('An unexpected error occurred:', error.message);
+    logger.error('An unexpected error occurred:', error.message);
   });

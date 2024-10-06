@@ -2,6 +2,7 @@ import {ListUserDto} from "../dto/ListUserDto";
 import {findUsersByLocationAndTechnology} from "../repository/UserRepository";
 import printf from "printf";
 import {UserTechnologiesDto} from "../dto/UserTechnologiesDto";
+import logger from "../helper/logger";
 
 interface UserPrintDto {
   login: string;
@@ -10,8 +11,20 @@ interface UserPrintDto {
   technologies: string[];
 }
 
-export const printData = (user: UserPrintDto | UserTechnologiesDto): void =>
-  console.log(
+export const printData =
+  (user: UserPrintDto | UserTechnologiesDto, asJson: boolean= false): void => {
+  logger.debug('PrintData called')
+  if(asJson) {
+    logger.info(JSON.stringify({
+      login: user.login,
+      name: user.name || 'No Name',
+      location: user.location || 'Unknown',
+      technologies: user.technologies.join(','),
+    }, null, 2));
+    return;
+  }
+
+  logger.info(
     printf(
       '|%-20s|%-40s|%-20s|%-50s|',
       user.login,
@@ -19,14 +32,15 @@ export const printData = (user: UserPrintDto | UserTechnologiesDto): void =>
       user.location || "Unknown",
       user.technologies.join(',')
     )
-  );
+  )
+};
 
 const listUserService = async function (filter: ListUserDto): Promise<void> {
   const users: UserTechnologiesDto[] =
     await findUsersByLocationAndTechnology(filter);
 
   if (users.length === 0) {
-    console.log('No users found.');
+    logger.info('No users found.');
     return;
   }
 
@@ -37,7 +51,7 @@ const listUserService = async function (filter: ListUserDto): Promise<void> {
     technologies: ['TECHNOLOGIES'],
   });
 
-  users.forEach(printData);
+  users.forEach( (u:UserTechnologiesDto) => printData(u));
 }
 
 export default listUserService;

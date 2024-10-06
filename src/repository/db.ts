@@ -1,12 +1,13 @@
 import pgPromise, {IDatabase, IEventContext, IMain} from 'pg-promise';
 import dotenv from 'dotenv';
+import logger from "../helper/logger";
 
 dotenv.config();
 
 const pgp: IMain = pgPromise({
   query(e: IEventContext): void {
-    console.log('QUERY:', e.query);
-    console.log('PARAMS:', e.params);
+    logger.debug(`Command: ${e.query}`, );
+    if(e.params) logger.debug(`PARAMS:${e.params}`);
   },
 });
 

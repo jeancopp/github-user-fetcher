@@ -53,6 +53,7 @@ const main = async (): Promise<void> => {
         if (args.print) {
           printData(storedUser, true);
         }
+        return;
       },
     )
     .command(
@@ -93,5 +94,6 @@ const main = async (): Promise<void> => {
 
 main()
   .catch((error): void => {
-    logger.error('An unexpected error occurred:', error.message);
+    logger.info("It was not possible to process your request");
+    logger.debug(`Unexpected error happened: ${error}`);
   });

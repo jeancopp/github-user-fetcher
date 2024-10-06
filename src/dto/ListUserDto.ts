@@ -1,4 +1,4 @@
-export interface ListUserDto{
-    location: string | null;
-    technology: string | null;
+export interface ListUserDto {
+  location: string | null;
+  technology: string | null;
 }

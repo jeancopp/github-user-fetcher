@@ -8,11 +8,10 @@ import {FetchUserDto} from "../dto/FetchUserDto";
 import {UserTechnologiesDto} from "../dto/UserTechnologiesDto";
 import {User} from "../entity/User";
 import db from "../repository/db";
-import {IDatabase} from "pg-promise";
 
 export default async function fetchUserService(userData: FetchUserDto)
   : Promise<UserTechnologiesDto | null> {
-  const user: User|null = await fetchGitHubUser(userData);
+  const user: User | null = await fetchGitHubUser(userData);
   if (null === user) {
     return null;
   }
@@ -29,7 +28,7 @@ export default async function fetchUserService(userData: FetchUserDto)
     }
 
     for (const technology of technologies) {
-      const technologyId = await insertTechnology(trx,technology);
+      const technologyId = await insertTechnology(trx, technology);
 
       await linkUserToTechnology(
         trx,

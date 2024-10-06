@@ -1,5 +1,5 @@
 import {User} from "../entity/User";
 
-export interface UserTechnologiesDto extends User{
-    technologies: string[];
+export interface UserTechnologiesDto extends User {
+  technologies: string[];
 }

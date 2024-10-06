@@ -1,3 +1,3 @@
-export interface FetchUserDto{
-    username: string;
+export interface FetchUserDto {
+  username: string;
 }

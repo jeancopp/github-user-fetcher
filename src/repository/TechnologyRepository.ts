@@ -13,7 +13,7 @@ const insertTechnology =
       [name],
     );
     return result.id;
-};
+  };
 
 const linkUserToTechnology = async (
   trx: IDatabase<void>,

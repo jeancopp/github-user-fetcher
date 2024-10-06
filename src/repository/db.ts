@@ -1,8 +1,14 @@
-import pgPromise, {IDatabase, IMain} from 'pg-promise';
+import pgPromise, {IDatabase, IEventContext, IMain} from 'pg-promise';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-const pgp: IMain = pgPromise();
+const pgp: IMain = pgPromise({
+  query(e: IEventContext): void {
+    console.log('QUERY:', e.query);
+    console.log('PARAMS:', e.params);
+  },
+});
 
 const db: IDatabase<any> = pgp({
   host: process.env?.DB_HOST ?? "localhost",

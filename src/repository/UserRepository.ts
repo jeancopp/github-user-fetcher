@@ -1,8 +1,10 @@
 import db from './db';
 import {User} from '../entity/User';
 import {ListUserDto} from "../dto/ListUserDto";
+import {IDatabase} from "pg-promise";
 
-export const insertUser = async (user: User): Promise<User> => {
+export const insertUser = async (trx: IDatabase<User>, user: User):
+  Promise<User> => {
   const query = `
     INSERT INTO users (
       github_id, login, name, location, meta_data, created_at, updated_at
@@ -17,7 +19,7 @@ export const insertUser = async (user: User): Promise<User> => {
       updated_at = NOW()
     RETURNING *;
   `;
-  return await db.one(query, user);
+  return await trx.one(query, user);
 };
 
 export const findUsersByLocationAndTechnology =

@@ -9,7 +9,7 @@ interface UserPrintDto {
   location: string;
 }
 
-const printData = (user: UserPrintDto | User): void =>
+export const printData = (user: UserPrintDto | User): void =>
   console.log(
     printf(
       '|%-20s|%-50s|%-20s|',

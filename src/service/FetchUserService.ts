@@ -7,6 +7,8 @@ import {
 import {FetchUserDto} from "../dto/FetchUserDto";
 import {UserTechnologiesDto} from "../dto/UserTechnologiesDto";
 import {User} from "../entity/User";
+import db from "../repository/db";
+import {IDatabase} from "pg-promise";
 
 export default async function fetchUserService(userData: FetchUserDto)
   : Promise<UserTechnologiesDto | null> {
@@ -14,25 +16,31 @@ export default async function fetchUserService(userData: FetchUserDto)
   if (null === user) {
     return null;
   }
+  const technologies: string[] = await fetchUserTechnologies(userData);
 
-  const savedUser = await insertUser(user);
-  const technologies = await fetchUserTechnologies(userData);
+  return await db.tx('insert-data', async trx => {
+    const savedUser = await insertUser(trx, user);
 
-  if (technologies.length > 0) {
+    if (!technologies.length) {
+      return {
+        ...savedUser,
+        technologies: [],
+      }
+    }
+
     for (const technology of technologies) {
-      const technologyId = await insertTechnology(
-        technology,
-      );
+      const technologyId = await insertTechnology(trx,technology);
 
       await linkUserToTechnology(
+        trx,
         savedUser.id!,
         technologyId,
       );
     }
-  }
 
-  return {
-    ...savedUser,
-    technologies,
-  }
+    return {
+      ...savedUser,
+      technologies,
+    }
+  });
 }

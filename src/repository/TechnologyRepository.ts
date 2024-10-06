@@ -1,8 +1,8 @@
-import db from './db';
+import {IDatabase} from "pg-promise";
 
 const insertTechnology =
-  async (name: string): Promise<number> => {
-    const result = await db.one(
+  async (trx: IDatabase<number>, name: string): Promise<number> => {
+    const result = await trx.one(
       `
           INSERT INTO technologies (name)
           VALUES (trim(upper($1)))
@@ -13,13 +13,14 @@ const insertTechnology =
       [name],
     );
     return result.id;
-  };
+};
 
 const linkUserToTechnology = async (
+  trx: IDatabase<void>,
   userId: number,
   technologyId: number,
 ): Promise<void> => {
-  await db.none(
+  await trx.none(
     `
         INSERT INTO user_stack (user_id, tech_id)
         VALUES ($1, $2)

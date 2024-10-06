@@ -11,12 +11,11 @@ import {FetchUserDto} from '../../src/dto/FetchUserDto';
 
 import fetchUserService from '../../src/service/FetchUserService';
 import {User} from "../../src/entity/User";
+import db from '../../src/repository/db';
 
 jest.mock('../../src/service/GitHubService');
 jest.mock('../../src/repository/UserRepository');
 jest.mock('../../src/repository/TechnologyRepository');
-//Mocking the following module to not receive error messages,
-// even that is not being called here directly
 jest.mock('../../src/repository/db');
 
 describe('fetchUserService', (): void => {
@@ -30,16 +29,16 @@ describe('fetchUserService', (): void => {
   };
 
   const mockTechnologies: string[] = ['JavaScript', 'TypeScript'];
+  const mockTrx = jest.fn();
 
   beforeEach(():void => {
     jest.clearAllMocks();
+    (db.tx as jest.Mock).mockImplementation((_, cb) => cb(mockTrx));
   });
 
   it('should insert user with their stack into the db',
     async (): Promise<void> => {
       //given
-      //It's done to not present error message during the execution
-      jest.spyOn(console, 'trace').mockImplementation();
       (fetchGitHubUser as jest.Mock).mockResolvedValueOnce(user);
       (insertUser as jest.Mock).mockResolvedValueOnce({id: 1});
       (fetchUserTechnologies as jest.Mock)
@@ -55,12 +54,12 @@ describe('fetchUserService', (): void => {
       expect(fetchGitHubUser).toHaveBeenCalledTimes(1);
       expect(fetchGitHubUser).toHaveBeenCalledWith(userDto);
       expect(insertUser).toHaveBeenCalledTimes(1);
-      expect(insertUser).toHaveBeenCalledWith(user);
+      expect(insertUser).toHaveBeenCalledWith(mockTrx, user);
       expect(fetchUserTechnologies).toHaveBeenCalledTimes(1);
       expect(fetchUserTechnologies).toHaveBeenCalledWith(userDto);
       expect(insertTechnology).toHaveBeenCalledTimes(mockTechnologies.length);
       mockTechnologies.forEach(tech => {
-        expect(insertTechnology).toHaveBeenCalledWith(tech);
+        expect(insertTechnology).toHaveBeenCalledWith(mockTrx, tech);
       });
       expect(linkUserToTechnology).toHaveBeenCalledTimes(mockTechnologies.length);
 

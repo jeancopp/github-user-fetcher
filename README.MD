@@ -31,6 +31,7 @@ Positionals:
 Options:
   --version  Show version number                                       [boolean]
   --help     Show help                                                 [boolean]
+  --print    Print user data                                           [boolean]
 ```
 
 

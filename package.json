@@ -1,0 +1,44 @@
+{
+  "name": "github-user-fetcher",
+  "version": "1.0.0",
+  "description": "Command-line app to fetch GitHub user data and store it in PostgreSQL",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "migrate": "node-pg-migrate up",
+    "lint": "eslint 'src/**/*.ts'",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "author": "Jean Coppieters Souza - <jean.coppieters@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "pg-promise": "^11.9.1",
+    "printf": "^0.6.1",
+    "validator": "^13.12.0",
+    "winston": "^3.15.0",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "@types/dotenv": "^8.2.0",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.7",
+    "@types/validator": "^13.12.2",
+    "@types/yargs": "^17.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
+    "globals": "^15.9.0",
+    "jest": "^29.7.0",
+    "node-pg-migrate": "^7.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.7.0"
+  }
+}
